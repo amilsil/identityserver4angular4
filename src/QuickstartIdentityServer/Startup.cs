@@ -11,6 +11,15 @@ namespace QuickstartIdentityServer
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
+
             services.AddMvc();
 
             // configure identity server with in-memory stores, keys, clients and scopes
@@ -28,6 +37,8 @@ namespace QuickstartIdentityServer
             app.UseDeveloperExceptionPage();
 
             app.UseIdentityServer();
+
+            // app.UseCors(builder => builder.AllowAnyOrigin());
 
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();

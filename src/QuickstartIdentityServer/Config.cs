@@ -73,6 +73,10 @@ namespace QuickstartIdentityServer
                     AllowAccessTokensViaBrowser = true,
                     AccessTokenLifetime = 60,
                     
+                    AllowedCorsOrigins = {
+                        "http://localhost:5002"
+                    },
+
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
