@@ -67,14 +67,20 @@ namespace QuickstartIdentityServer
                     ClientName = "MVC Client",
                     AllowedGrantTypes = GrantTypes.Implicit,
 
-                    RedirectUris = { "http://localhost:5002/signin-oidc", "http://localhost:5002/auth.html" },
+                    RedirectUris = { 
+                        "http://localhost:5002/signin-oidc", 
+                        "http://localhost:5002/auth.html",
+                        "http://localhost:5003/user-manager-sample.html",
+                        "http://localhost:5003/user-manager-sample-silent.html"
+                    },
                     PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
                     
                     AllowAccessTokensViaBrowser = true,
-                    AccessTokenLifetime = 60,
+                    AccessTokenLifetime = 90,
                     
                     AllowedCorsOrigins = {
-                        "http://localhost:5002"
+                        "http://localhost:5002",
+                        "http://localhost:5003",
                     },
 
                     AllowedScopes =

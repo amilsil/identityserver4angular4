@@ -15,13 +15,14 @@ const settings: any = {
 
   silent_redirect_uri: 'http://localhost:5002/auth.html',
   automaticSilentRenew: true,
-  silentRequestTimeout: 1000,
+  //silentRequestTimeout: 80000,
 
   filterProtocolClaims: true,
   loadUserInfo: true
 };
 
 Log.logger = console;
+Log.level = Log.DEBUG;
 
 @Injectable()
 export class AuthService {
