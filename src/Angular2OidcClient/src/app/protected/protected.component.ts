@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
+import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   selector: 'app-protected',
@@ -7,12 +8,12 @@ import { Location } from '@angular/common';
   styleUrls: ['protected.component.scss']
 })
 export class ProtectedComponent implements OnInit {
-
-  constructor(private location:Location) { }
+  constructor(private location: Location, private authService: AuthService) { }
 
   ngOnInit() {
   }
-  goback(){
+
+  goback() {
     this.location.back();
   }
 

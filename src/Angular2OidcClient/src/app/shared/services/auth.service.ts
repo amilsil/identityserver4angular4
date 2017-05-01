@@ -8,14 +8,15 @@ import { environment } from '../../';
 const settings: any = {
   authority: 'http://localhost:5000',
   client_id: 'mvc',
-  redirect_uri: 'http://localhost:5002/auth.html',
-  post_logout_redirect_uri: 'http://localhost:5002',
+  redirect_uri: 'http://localhost:4200/auth.html',
+  post_logout_redirect_uri: 'http://localhost:4200/',
   response_type: 'id_token token',
   scope: 'openid profile api1',
 
-  silent_redirect_uri: 'http://localhost:5002/auth.html',
+  silent_redirect_uri: 'http://localhost:4200/silent-renew.html',
   automaticSilentRenew: true,
-  //silentRequestTimeout: 80000,
+  accessTokenExpiringNotificationTime: 4,
+  // silentRequestTimeout:10000,
 
   filterProtocolClaims: true,
   loadUserInfo: true
@@ -35,8 +36,7 @@ export class AuthService {
 
 
   constructor(private http: Http) {
-      Log.logger = console;
-    
+
     this.mgr.getUser()
       .then((user) => {
         if (user) {
@@ -51,13 +51,34 @@ export class AuthService {
       .catch((err) => {
         this.loggedIn = false;
       });
+
+    this.mgr.events.addUserLoaded((user) => {
+      this.currentUser = user;
+      if (!environment.production) {
+        console.log('authService addUserLoaded', user);
+      }
+
+    });
+
     this.mgr.events.addUserUnloaded((e) => {
       if (!environment.production) {
         console.log('user unloaded');
       }
       this.loggedIn = false;
     });
+
   }
+
+  isLoggedInObs(): Observable<boolean> {
+    return Observable.fromPromise(this.mgr.getUser()).map<User, boolean>((user) => {
+      if (user) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
+
   clearState() {
     this.mgr.clearStaleState().then(function () {
       console.log('clearStateState success');
@@ -68,6 +89,7 @@ export class AuthService {
 
   getUser() {
     this.mgr.getUser().then((user) => {
+      this.currentUser = user;
       console.log('got user', user);
       this.userLoadededEvent.emit(user);
     }).catch(function (err) {
